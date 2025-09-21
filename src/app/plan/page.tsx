@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 
@@ -13,7 +13,7 @@ interface Plan {
   location: string;
 }
 
-export default function Plan() {
+function PlanContent() {
   const [plans, setPlans] = useState<Plan[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [location, setLocation] = useState("");
@@ -240,5 +240,22 @@ export default function Plan() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function Plan() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-8 h-8 border-2 border-blue-200 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-blue-200">Cargando...</p>
+          </div>
+        </div>
+      }
+    >
+      <PlanContent />
+    </Suspense>
   );
 }
